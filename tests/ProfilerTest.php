@@ -5,6 +5,9 @@ require('setup.php');
 class ProfilerTest extends PHPUnit_Framework_TestCase {
 	
 	public function testStart() {
+		// try to start an empty timer
+		$this->assertFalse(Profiler::start(''));
+		
 		// start a new timer
 		$this->assertTrue(Profiler::start('test-timer'));
 		

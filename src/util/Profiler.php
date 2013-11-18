@@ -77,6 +77,11 @@ class Profiler {
 	 * @return bool         true if the timer was started; otherwise false
 	 */
 	public static function start($timer) {
+		// make sure we actually have a valid timer name
+		if (empty($timer)) {
+			return false;
+		}
+		
 		// if the timer doesn't exist yet, create it
 		if (!isset(self::$_timers[$timer])) {
 			self::reset($timer);
