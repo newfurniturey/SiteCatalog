@@ -13,12 +13,17 @@ namespace SiteCatalog\config;
 /**
  * Convenience definition for PHP's Directory Separator.
  */
-	define('DS', DIRECTORY_SEPARATOR);
+	if (!defined('DS')) {
+		define('DS', DIRECTORY_SEPARATOR);
+	}
 
 /**
  * Convenience definition for this application's Document Root.
  */
-	define('DOC_ROOT', $_SERVER['DOCUMENT_ROOT']);
+	if (!defined('DOC_ROOT')) {
+		$doc_root = !empty($_SERVER['DOCUMENT_ROOT']) ? $_SERVER['DOCUMENT_ROOT'] : dirname(dirname(__FILE__));
+		define('DOC_ROOT', $doc_root);
+	}
 
 /**
  * Register a namespace-path to class-path __autoload function.
