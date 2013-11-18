@@ -55,6 +55,7 @@ class Profiler {
 	 * Starts the specified timer.
 	 *
 	 * @param string $timer The name of the timer to start.
+	 * @return bool         true if the timer was started; otherwise false
 	 */
 	public static function start($timer) {
 		// if the timer doesn't exist yet, create it
@@ -62,12 +63,21 @@ class Profiler {
 			self::reset($timer);
 		}
 		
+		$timer = &self::$_timers[$timer];
+		
+		// check if the timer is currently running
+		$index = $timer['num_starts'] - 1;
+		if (($index >= 0) && empty($timer['runs'][$index]['end'])) {
+			return false;
+		}
+
 		// add the current time as the starting-time for this timer
-		self::$_timers[$timer]['runs'][self::$_timers[$timer]['num_starts']] = array(
+		$timer['runs'][$timer['num_starts']] = array(
 			'start' => microtime(true),
 			'end' => false
 		);
-		self::$_timers[$timer]['num_starts']++;
+		$timer['num_starts']++;
+		return true;
 	}
 
 	/**
