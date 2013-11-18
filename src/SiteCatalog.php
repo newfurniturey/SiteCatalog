@@ -7,7 +7,7 @@
 namespace SiteCatalog;
 
 // load the app's config
-require($_SERVER['DOCUMENT_ROOT'] . '/config/bootstrap.php');
+require('config/bootstrap.php');
 
 // validate that we're running in a console and we have the correct arguments
 // @todo: move this to a dedicated utility
