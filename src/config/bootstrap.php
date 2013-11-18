@@ -41,8 +41,8 @@ namespace SiteCatalog\config;
 		$class = str_replace('\\', DS, $class);
 		
 		// give the path a .php extension and if the file exists, include it!
-		$class = $class . '.php';
-		if (file_exists($class)) {
-			require_once($class);
+		$path = sprintf('%s/%s.php', DOC_ROOT, $class);
+		if (file_exists($path)) {
+			require_once($path);
 		}
 	});
