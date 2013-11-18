@@ -33,12 +33,14 @@ class Profiler {
 		
 		// calculate the average running-time
 		$mean = 0.0;
-		for ($i = 0; $i < $count; $i++) {
-			$run = $timer['runs'][$i];
-			$time = (!empty($run['end']) ? $run['end'] : microtime(true)) - $run['start'];
-			$mean += (float)$time;
+		if ($count > 0) {
+			for ($i = 0; $i < $count; $i++) {
+				$run = $timer['runs'][$i];
+				$time = (!empty($run['end']) ? $run['end'] : microtime(true)) - $run['start'];
+				$mean += (float)$time;
+			}
+			$mean /= (float)$count;
 		}
-		$mean /= (float)$count;
 		
 		return compact('total_duration', 'count', 'mean');
 	}

@@ -55,6 +55,11 @@ class ProfilerTest extends PHPUnit_Framework_TestCase {
 		// do a rudimentary check to see if the duration is close to what it should be
 		$this->assertTrue(($numRuns * $sleep) <= ceil($info['total_duration']));
 		
+		// reset the timer and do another get-test
+		Profiler::reset($timerName);
+		$info = Profiler::get($timerName);
+		$this->assertEquals(0, $info['count']);
+		
 		// get info from a timer that doesn't exist
 		$this->assertFalse(Profiler::get('iDon\'tExist'));
 	}
