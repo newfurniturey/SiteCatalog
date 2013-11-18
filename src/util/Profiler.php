@@ -16,12 +16,31 @@ class Profiler {
 	private function __construct() { }
 
 	/**
-	 * Retrieves the requested info for the specified timer.
+	 * Calculates and returns stat-data for the requested timer.
 	 *
 	 * @param string $timer The name of the timer to get info for.
+	 * @return mixed        Aggregate data from the current timer; false if no timer exists.
 	 */
 	public static function get($timer) {
+		if (!isset(self::$_timers[$timer])) {
+			return false;
+		}
 		
+		// get the timer's main info
+		$timer = &self::$_timers[$timer];
+		$total_duration = $timer['total_duration'];
+		$count = $timer['num_starts'];
+		
+		// calculate the average running-time
+		$mean = 0.0;
+		for ($i = 0; $i < $count; $i++) {
+			$run = $timer['runs'][$i];
+			$time = (!empty($run['end']) ? $run['end'] : microtime(true)) - $run['start'];
+			$mean += (float)$time;
+		}
+		$mean /= (float)$count;
+		
+		return compact('total_duration', 'count', 'mean');
 	}
 	
 	/**
@@ -30,7 +49,7 @@ class Profiler {
 	 * @param string $timer The name of the timer to remove.
 	 */
 	public static function remove($timer) {
-		
+		unset(self::$_timers[$timer]);
 	}
 	
 	/**
