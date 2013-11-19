@@ -4,7 +4,7 @@
  */
 namespace SiteCatalog\core;
 
-class Object {
+abstract class Object {
 	/**
 	 * Override to prevent reading class-variables that don't exist.
 	 * 
@@ -12,7 +12,7 @@ class Object {
 	 * @throws Exception
 	 */
 	public function __get($varName) {
-		throw new Exception(sprintf('Class-variable %s not defined.', $varName));
+		throw new \Exception(sprintf('Class-variable %s not defined.', $varName));
 	}
 	
 	/**
@@ -23,6 +23,6 @@ class Object {
 	 * @throws Exception
 	 */
 	public function __set($varName, $value = null) {
-		throw new Exception(sprintf('Class-variable %s not defined.', $varName));
+		throw new \Exception(sprintf('Class-variable %s not defined.', $varName));
 	}
 }
