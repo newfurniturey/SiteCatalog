@@ -18,4 +18,24 @@ class WebHeaderCollectionTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals('yeah!', $collection['X-Custom-Header']);
 	}
 	
+	public function testIterator() {
+		$values = array('zero', 'one', 'two', 'three');
+		
+		// create and populate the headers
+		$collection = new WebHeaderCollection();
+		foreach ($values as $value => $key) {
+			$collection[$key] = $value;
+		}
+		
+		// make sure the counts match up
+		$this->assertEquals(count($values), count($collection));
+
+		// do a foreach and make sure it accesses in-order
+		$index = 0;
+		foreach ($collection as $value => $key) {
+			$this->assertEquals($index, $key);
+			$this->assertEquals($values[$index], $value);
+			$index++;
+		}
+	}
 }
