@@ -11,6 +11,23 @@ class WebHeaderCollection extends \SiteCatalog\core\Object implements \ArrayAcce
 	private $_headers = array();
 	
 	/**
+	 * Inserts a header with the specified name and value into the collection.
+	 * 
+	 * @param string $header Name of the header to insert.
+	 * @param string $value  Value to assign to the header.
+	 */
+	public function add($header, $value) {
+		$this[$header] = $value;
+	}
+	
+	/**
+	 * Removes all headers from the collection.
+	 */
+	public function clear() {
+		$this->_headers = array();
+	}
+	
+	/**
 	 * Count elements of an object.
 	 * 
 	 * @inheritDoc
@@ -26,6 +43,16 @@ class WebHeaderCollection extends \SiteCatalog\core\Object implements \ArrayAcce
 	 */
 	public function current() {
 		return current($this->_headers);
+	}
+	
+	/**
+	 * Get the value of the specified header in the collection.
+	 * 
+	 * @param string $header Name of the header to return the value of.
+	 * @return string        Value of the header; null if not defined.
+	 */
+	public function get($header) {
+		return $this[$header];
 	}
 	
 	/**
@@ -83,12 +110,31 @@ class WebHeaderCollection extends \SiteCatalog\core\Object implements \ArrayAcce
 	}
 	
 	/**
+	 * Removes the specified header from the collection.
+	 * 
+	 * @param string $header Name of the header to remove.
+	 */
+	public function remove($header) {
+		unset($this[$header]);
+	}
+	
+	/**
 	 * Rewind the iterator to the first element.
 	 * 
 	 * @inheritDoc
 	 */
 	public function rewind() {
 		reset($this->_headers);
+	}
+	
+	/**
+	 * Sets the specified header to the specified value.
+	 * 
+	 * @param string $header Name of the header to set.
+	 * @param string $value  Value to assign to the header.
+	 */
+	public function set($header, $value) {
+		$this[$header] = $value;
 	}
 	
 	/**
