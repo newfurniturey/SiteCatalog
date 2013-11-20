@@ -51,4 +51,10 @@ abstract class WebRequest extends \SiteCatalog\core\Object {
 		$this->headers = new WebHeaderCollection();
 	}
 	
+	/**
+	 * Returns a response to an Internet request.
+	 * 
+	 * @return WebResponse A WebReponse containing the response to the internet request.
+	 */
+	public abstract function getResponse();
 }
