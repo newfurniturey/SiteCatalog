@@ -5,6 +5,7 @@
  * @todo: Add cookie management.
  */
 namespace SiteCatalog\net;
+use SiteCatalog\net\WebHeaders as WebHeaders;
 
 class HttpWebRequest extends \SiteCatalog\net\WebRequest {
 	/**
@@ -91,4 +92,27 @@ class HttpWebRequest extends \SiteCatalog\net\WebRequest {
 		return $response;
 	}
 	
+	/**
+	 * Overwrites any header that was explicitly defined via one of the many
+	 * convenience-properties for this HttpWebRequest instance.
+	 */
+	protected function _setHeaders() {
+		static $map = array(
+			'accept' => WebHeaders::ACCEPT,
+			'connection' => WebHeader::CONNECTION,
+			'host' => WebHeaders::HOST,
+			'expect' => WebHeaders::EXPECT,
+			'date' => WebHeaders::DATE,
+			'ifModifiedSince' => WebHeaders::IF_MODIFIED_SINCE,
+			'referer' => WebHeaders::REFERER,
+			'transferEncoding' => WebHeaders::TRANSFER_ENCODING,
+			'userAgent' => WebHeaders::USER_AGENT
+		);
+		
+		foreach ($map as $property => $header) {
+			if (!empty($this->{$property})) {
+				$this->headers[$header] = $this->{$property};
+			}
+		}
+	}
 }
