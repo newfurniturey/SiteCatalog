@@ -11,6 +11,17 @@ class WebHeaderCollection extends \SiteCatalog\core\Object implements \ArrayAcce
 	private $_headers = array();
 	
 	/**
+	 * Builds a CR-LF delimited response of all the headers in the current collection.
+	 */
+	public function __toString() {
+		$headers = '';
+		foreach ($this as $key => $value) {
+			$headers .= sprintf("%s: %s\r\n", $key, $value);
+		}
+		return $headers;
+	}
+	
+	/**
 	 * Inserts a header with the specified name and value into the collection.
 	 * 
 	 * @param string $header Name of the header to insert.

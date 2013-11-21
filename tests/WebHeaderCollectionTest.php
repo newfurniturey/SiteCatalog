@@ -72,4 +72,17 @@ class WebHeaderCollectionTest extends PHPUnit_Framework_TestCase {
 			$index++;
 		}
 	}
+	
+	public function testPrint() {
+		$values = array('zero', 'one', 'two', 'three');
+		
+		// create and populate the headers
+		$collection = new WebHeaderCollection();
+		foreach ($values as $value => $key) {
+			$collection[$key] = $value;
+		}
+		
+		$str = (string)$collection;
+		$this->assertEquals(count($values), substr_count($str, "\r\n"));
+	}
 }
