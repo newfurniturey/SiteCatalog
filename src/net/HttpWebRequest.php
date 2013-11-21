@@ -3,6 +3,7 @@
  * Provides a HTTP-specific implementation of the WebRequest class.
  * 
  * @todo: Add cookie management.
+ * @todo: Split curl-usage into a separate interface to hide the implementation.
  */
 namespace SiteCatalog\net;
 use SiteCatalog\net\WebHeaders as WebHeaders;
@@ -87,9 +88,25 @@ class HttpWebRequest extends \SiteCatalog\net\WebRequest {
 	 * @inheritDoc
 	 */
 	public function getResponse() {
-		$response = new HttpWebResponse();
-		// @todo: implement
-		return $response;
+		if (empty($this->requestUri)) {
+			// @todo: Implement better (or actual) URI validation
+			throw new \UnexpectedValueException("requestUri");
+		}
+		
+		return $this->_getResponse();
+	}
+	
+	/**
+	 * Finalizes all request settings and makes the internet request.
+	 * 
+	 * @return \SiteCatalog\net\HttpWebResponse
+	 */
+	protected function _getResponse() {
+		$this->_setHeaders();
+		
+		// @todo: Make the "type" of connection app-specified and not hardcoded
+		$connection = new CurlConnection($this);
+		return $connection->getResponse();
 	}
 	
 	/**
