@@ -5,17 +5,17 @@
 namespace SiteCatalog\net;
 
 class WebHeaders {
-	const ACCEPT = 'Accept';
-	const CONNECTION = 'Connection';
-	const CONTENT_LENGTH = 'Content-Length';
-	const CONTENT_TYPE = 'Content-Type';
-	const DATE = 'Date';
-	const EXPECT = 'Expect';
-	const HOST = 'Host';
-	const IF_MODIFIED_SINCE = 'If-Modified-Since';
-	const RANGE = 'Range';
-	const REFERER = 'Referer';
-	const TRANSFER_ENCODING = 'Transfer-Encoding';
-	const USER_AGENT = 'User-Agent';
-	const PROXY_CONNECTION = 'Proxy-Connection';
+	const Accept = 'Accept';
+	const Connection = 'Connection';
+	const ContentLength = 'Content-Length';
+	const ContentType = 'Content-Type';
+	const Date = 'Date';
+	const Expect = 'Expect';
+	const Host = 'Host';
+	const IfModifiedSince = 'If-Modified-Since';
+	const Range = 'Range';
+	const Referer = 'Referer';
+	const TransferEncoding = 'Transfer-Encoding';
+	const UserAgent = 'User-Agent';
+	const ProxyConnection = 'Proxy-Connection';
 }

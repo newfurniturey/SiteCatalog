@@ -98,15 +98,15 @@ class HttpWebRequest extends \SiteCatalog\net\WebRequest {
 	 */
 	protected function _setHeaders() {
 		static $map = array(
-			'accept' => WebHeaders::ACCEPT,
-			'connection' => WebHeader::CONNECTION,
-			'host' => WebHeaders::HOST,
-			'expect' => WebHeaders::EXPECT,
-			'date' => WebHeaders::DATE,
-			'ifModifiedSince' => WebHeaders::IF_MODIFIED_SINCE,
-			'referer' => WebHeaders::REFERER,
-			'transferEncoding' => WebHeaders::TRANSFER_ENCODING,
-			'userAgent' => WebHeaders::USER_AGENT
+			'accept' => WebHeaders::Accept,
+			'connection' => WebHeader::Connection,
+			'host' => WebHeaders::Host,
+			'expect' => WebHeaders::Expect,
+			'date' => WebHeaders::Date,
+			'ifModifiedSince' => WebHeaders::IfModifiedSince,
+			'referer' => WebHeaders::Referer,
+			'transferEncoding' => WebHeaders::TransferEncoding,
+			'userAgent' => WebHeaders::UserAgent
 		);
 		
 		foreach ($map as $property => $header) {
