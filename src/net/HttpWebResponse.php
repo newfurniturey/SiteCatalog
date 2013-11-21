@@ -42,7 +42,7 @@ class HttpWebResponse extends \SiteCatalog\net\WebResponse {
 	/**
 	 * The status of the response.
 	 */
-	public $statusCode = 0;
+	public $statusCode = null;
 	
 	/**
 	 * The status description returned with the response.
