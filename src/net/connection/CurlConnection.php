@@ -51,12 +51,20 @@ class CurlConnection implements SiteCatalog\net\connection\IConnection {
 	/**
 	 * Parse the response to construct our header collection.
 	 * 
-	 * @param array $curlResponse                   An array containing all response data.
+	 * @param array $curlResponse                   An array containing all response data. {@see _exec()}
 	 * @return \SiteCatalog\net\WebHeaderCollection The constructed header collection.
 	 */
 	private function _buildHeaders(array $curlResponse) {
 		$headers = new WebHeaderCollection();
-		// @todo: implement header parsing
+		if (!empty($curlResponse['content']) && !empty($curlResponse['headers'])) {
+			// pull the list of headers from the top of the response-content
+			$responseHeaders = explode("\r\n", trim(substr($curlResponse['content'], 0, $curlResponse['headers']['header_size'])));
+			foreach ($responseHeaders as $header) {
+				// get each name:value line and add it to our collection
+				list($name, $value) = explode(':', $header, 2);
+				$headers[trim($name)] = trim($value);
+			}
+		}
 		return $headers;
 	}
 
