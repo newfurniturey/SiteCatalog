@@ -18,6 +18,7 @@ class WebHeaders {
 	const Range = 'Range';
 	const Referer = 'Referer';
 	const Server = 'Server';
+	const Status = 'Status'; // not an "official" header
 	const TransferEncoding = 'Transfer-Encoding';
 	const UserAgent = 'User-Agent';
 	const ProxyConnection = 'Proxy-Connection';
