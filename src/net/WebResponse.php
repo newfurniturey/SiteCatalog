@@ -3,6 +3,7 @@
  * Provides a response from a Uniform Resource Identifier (URI).
  */
 namespace SiteCatalog\net;
+use SiteCatalog\net\WebHeaderCollection as WebHeaderCollection;
 
 abstract class WebResponse extends \SiteCatalog\core\Object {
 	/**
@@ -28,9 +29,35 @@ abstract class WebResponse extends \SiteCatalog\core\Object {
 	
 	/**
 	 * Initializes a new WebResponse instance.
+	 * 
+	 * @param \SiteCatalog\net\WebHeadercollection $headers The headers to use for this response; if defined, all convenience properties
+	 *                                                      will automatically be populated.
 	 */
-	public function __construct() {
-		$this->headers = new WebHeaderCollection();
+	public function __construct(WebHeaderCollection $headers = null) {
+		if ($headers !== null) {
+			if (!($headers instanceof WebHeaderCollection)) {
+				throw new \InvalidArgumentException('$headers');
+			}
+			$this->headers = $headers;
+			$this->_processHeaders();
+		} else {
+			$this->headers = new WebHeaderCollection();
+		}
 	}
 	
+	/**
+	 * Populates all convenience-properties with specific header data.
+	 */
+	protected function _processHeaders() {
+		static $map = array(
+			WebHeaders::ContentLength => 'contentLength',
+			WebHeaders::ContentType => 'contentType'
+		);
+		
+		foreach ($map as $header => $property) {
+			if (isset($this->headers[$header])) {
+				$this->{$property} = $this->headers[$header];
+			}
+		}
+	}
 }

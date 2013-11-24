@@ -8,12 +8,6 @@
 namespace SiteCatalog\net;
 
 class HttpWebResponse extends \SiteCatalog\net\WebResponse {
-	
-	/**
-	 * The character set of the response.
-	 */
-	public $characterSet = null;
-	
 	/**
 	 * The method that is used to encode the body of the response.
 	 */
@@ -49,4 +43,19 @@ class HttpWebResponse extends \SiteCatalog\net\WebResponse {
 	 */
 	public $statusDescription = null;
 	
+	/**
+	 * @inheritDoc
+	 */
+	protected function _processHeaders() {
+		parent::_processHeaders();
+		static $map = array(
+			WebHeaders::Server => 'server'
+		);
+		
+		foreach ($map as $header => $property) {
+			if (isset($this->headers[$header])) {
+				$this->{$property} = $this->headers[$header];
+			}
+		}
+	}
 }
