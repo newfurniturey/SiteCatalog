@@ -5,7 +5,7 @@
  * An automated and interactive tool for cataloging web applications.
  */
 namespace SiteCatalog;
-use SiteCatalog\util\Profiler as Profiler;
+use SiteCatalog\util\Profiler;
 
 // load the app's config
 require('config/bootstrap.php');

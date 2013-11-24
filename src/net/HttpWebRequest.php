@@ -6,7 +6,8 @@
  * @todo: Split curl-usage into a separate interface to hide the implementation.
  */
 namespace SiteCatalog\net;
-use SiteCatalog\net\WebHeaders as WebHeaders;
+use SiteCatalog\net\WebHeaders;
+use SiteCatalog\net\connection\CurlConnection;
 
 class HttpWebRequest extends \SiteCatalog\net\WebRequest {
 	/**
@@ -121,7 +122,7 @@ class HttpWebRequest extends \SiteCatalog\net\WebRequest {
 		parent::_setHeaders();
 		static $map = array(
 			'accept' => WebHeaders::Accept,
-			'connection' => WebHeader::Connection,
+			'connection' => WebHeaders::Connection,
 			'date' => WebHeaders::Date,
 			'expect' => WebHeaders::Expect,
 			'host' => WebHeaders::Host,

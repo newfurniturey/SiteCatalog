@@ -3,7 +3,7 @@
  * Provides a response from a Uniform Resource Identifier (URI).
  */
 namespace SiteCatalog\net;
-use SiteCatalog\net\WebHeaderCollection as WebHeaderCollection;
+use SiteCatalog\net\WebHeaderCollection;
 
 abstract class WebResponse extends \SiteCatalog\core\Object {
 	/**

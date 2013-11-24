@@ -8,8 +8,9 @@ use SiteCatalog\net\WebRequest;
 use SiteCatalog\net\HttpWebRequest;
 use SiteCatalog\net\WebResponse;
 use SiteCatalog\net\HttpWebResponse;
+use SiteCatalog\net\connection\IConnection;
 
-class CurlConnection implements SiteCatalog\net\connection\IConnection {
+class CurlConnection implements IConnection {
 	/**
 	 * The current request object.
 	 * @var \SiteCatalog\net\WebRequest

@@ -3,7 +3,7 @@
  * Interface to outline the structure required to make an Internet request.
  */
 namespace SiteCatalog\net\connection;
-use SiteCatalog\net\WebRequest as WebRequest;
+use SiteCatalog\net\WebRequest;
 
 interface IConnection {
 	
