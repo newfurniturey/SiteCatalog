@@ -4,7 +4,7 @@
  */
 namespace SiteCatalog\net;
 
-class WebHeaders {
+class HttpStatusCode {
 	// Informational 1xx
 	const Continue100 = 100; // `continue` is a reserved word =[
 	const SwitchingProtocols = 101;
