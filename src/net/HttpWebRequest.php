@@ -41,11 +41,6 @@ class HttpWebRequest extends \SiteCatalog\net\WebRequest {
 	public $expect = null;
 	
 	/**
-	 * Indicates whether a response has been received from an Internet resource.
-	 */
-	public $haveResponse = false;
-	
-	/**
 	 * Convenience-property for the Host HTTP header, independent from the request URI.
 	 */
 	public $host = null;

@@ -16,6 +16,11 @@ abstract class WebRequest extends \SiteCatalog\core\Object {
 	public $contentType = null;
 	
 	/**
+	 * Indicates whether a response has been received from an Internet resource.
+	 */
+	public $haveResponse = false;
+	
+	/**
 	 * The collection of header name/value pairs associated with the request.
 	 * @var WebHeaderCollection
 	 */
