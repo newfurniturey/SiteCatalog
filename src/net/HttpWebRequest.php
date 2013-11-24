@@ -113,23 +113,28 @@ class HttpWebRequest extends \SiteCatalog\net\WebRequest {
 	 * @inheritDoc
 	 */
 	protected function _setHeaders() {
+		parent::_setHeaders();
 		static $map = array(
 			'accept' => WebHeaders::Accept,
 			'connection' => WebHeader::Connection,
-			'host' => WebHeaders::Host,
-			'expect' => WebHeaders::Expect,
 			'date' => WebHeaders::Date,
+			'expect' => WebHeaders::Expect,
+			'host' => WebHeaders::Host,
 			'ifModifiedSince' => WebHeaders::IfModifiedSince,
 			'referer' => WebHeaders::Referer,
 			'transferEncoding' => WebHeaders::TransferEncoding,
 			'userAgent' => WebHeaders::UserAgent
 		);
 		
-		parent::_setHeaders();
 		foreach ($map as $property => $header) {
 			if (!empty($this->{$property})) {
 				$this->headers[$header] = $this->{$property};
 			}
+		}
+		
+		// set the keep-alive header if `connection` isn't already specified
+		if (!empty($this->keepAlive) && empty($this->connection)) {
+			$this->headers['Connection'] = 'Keep-Alive';
 		}
 	}
 }
