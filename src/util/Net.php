@@ -25,10 +25,10 @@ class Net {
 			if (strpos($header, ':') !== false) {
 				// process the name:value header
 				list($name, $value) = explode(':', $header, 2);
-				$headers[trim($name)] = trim($value);
+				$headerCollection[trim($name)] = trim($value);
 			} else if (preg_match('/^HTTP\/(1\.[\d])\s+([\d]{3})\s+(.*)?$/i', $header)) {
 				// we have our http status code (with the protocol & message)
-				$headers[WebHeaders::Status] = $header;
+				$headerCollection[WebHeaders::Status] = $header;
 			}
 		}
 		return $headerCollection;
