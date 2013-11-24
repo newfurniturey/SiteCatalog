@@ -3,10 +3,11 @@
  * A curl implementation for internet requests.
  */
 namespace SiteCatalog\net\connection;
-use SiteCatalog\net\WebRequest as WebRequest;
-use SiteCatalog\net\HttpWebRequest as HttpWebRequest;
-use SiteCatalog\net\WebResponse as WebResponse;
-use SiteCatalog\net\HttpWebResponse as HttpWebResponse;
+use SiteCatalog\net\WebHeaderCollection;
+use SiteCatalog\net\WebRequest;
+use SiteCatalog\net\HttpWebRequest;
+use SiteCatalog\net\WebResponse;
+use SiteCatalog\net\HttpWebResponse;
 
 class CurlConnection implements SiteCatalog\net\connection\IConnection {
 	/**
@@ -34,23 +35,41 @@ class CurlConnection implements SiteCatalog\net\connection\IConnection {
 	 * @throws \SiteCatalog\core\exceptions\UnsupportedRequestType
 	 */
 	public function getResponse() {
-		$response = $this->_createResponseObject();
+		$curlResponse = $this->_exec();
+		if ($curlResponse['errno']) {
+			throw new CurlException($curlResponse['errmsg'], $curlResponse['errno']);
+		}
+		
+		$headers = $this->_buildHeaders($curlResponse);
+		$response = $this->_createResponseObject($headers);
 		if ($response === null) {
 			throw new \SiteCatalog\core\exceptions\UnsupportedRequestType(get_class($this->_request));
 		}
-		
-		return $this->_exec($response);
+		return $response;
+	}
+	
+	/**
+	 * Parse the response to construct our header collection.
+	 * 
+	 * @param array $curlResponse                   An array containing all response data.
+	 * @return \SiteCatalog\net\WebHeaderCollection The constructed header collection.
+	 */
+	private function _buildHeaders(array $curlResponse) {
+		$headers = new WebHeaderCollection();
+		// @todo: implement header parsing
+		return $headers;
 	}
 
 	/**
 	 * Generate a type-specific Web Response based on the current request.
 	 * 
-	 * @return \SiteCatalog\net\WebResponse
+	 * @param \SiteCatalog\net\WebHeaderCollection $headers The response headers to create the object with.
+	 * @return \SiteCatalog\net\WebResponse                 The initialized response object.
 	 */
-	private function _createResponseObject() {
+	private function _createResponseObject(WebHeaderCollection $headers) {
 		switch (get_class($this->_request)) {
 			case HttpWebRequest:
-				return new HttpWebResponse();
+				return new HttpWebResponse($headers);
 			default:
 				return null;
 		}
@@ -59,9 +78,9 @@ class CurlConnection implements SiteCatalog\net\connection\IConnection {
 	/**
 	 * Construct and execute our curl-request and populate the response object to return.
 	 * 
-	 * @param \SiteCatalog\net\WebResponse $response
+	 * @return array A constructed list of all properties from the curl-request.
 	 */
-	private function _exec(WebResponse &$response) {
+	private function _exec() {
 		// create the curl object
 		$ch = curl_init();
 		
@@ -71,8 +90,18 @@ class CurlConnection implements SiteCatalog\net\connection\IConnection {
 		// set any specified headers
 		$this->_setHeaders($ch);
 		
+		// execute the request and save the response data
+		$response = array(
+			'content' => curl_exec($ch),
+			'headers' => curl_getinfo($ch),
+			'errno' => curl_errno($ch),
+			'errmsg' => curl_error($ch)
+		);
+		
 		// close our curl object
 		curl_close($ch);
+		
+		return $response;
 	}
 	
 	/**
