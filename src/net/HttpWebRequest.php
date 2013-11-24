@@ -94,7 +94,11 @@ class HttpWebRequest extends \SiteCatalog\net\WebRequest {
 			throw new \UnexpectedValueException("requestUri");
 		}
 		
-		return $this->_getResponse();
+		$response = $this->_getResponse();
+		if ($response) {
+			$this->haveResponse = true;
+		}
+		return $response;
 	}
 	
 	/**
