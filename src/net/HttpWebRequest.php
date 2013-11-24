@@ -66,8 +66,10 @@ class HttpWebRequest extends \SiteCatalog\net\WebRequest {
 	
 	/**
 	 * The version of HTTP to use for the request.
+	 * 
+	 * Supported versions: 1.0, 1.1
 	 */
-	public $protocolVersion = null;
+	public $protocolVersion = '1.1';
 	
 	/**
 	 * Convenience-property for the Referer HTTP header.
