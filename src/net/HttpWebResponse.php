@@ -57,5 +57,27 @@ class HttpWebResponse extends \SiteCatalog\net\WebResponse {
 				$this->{$property} = $this->headers[$header];
 			}
 		}
+		
+		// process the response's status header
+		if (!empty($this->headers[WebHeaders::Status])) {
+			$this->_processStatusHeader($this->headers[WebHeaders::Status]);
+		}
+	}
+	
+	/**
+	 * Process the response's status header to detect the HTTP protocol version, response code and
+	 * any set response message (i.e. OK, Method Not Allowed, etc.)
+	 * 
+	 * @param string $status The status header to parse.
+	 */
+	private function _processStatusHeader($status) {
+		$match = array();
+		if (preg_match('/^HTTP\/(?<protocol>1\.[\d])\s+(?<code>[\d]{3})(\s+(?<message>.*))?$/i', $status, $match)) {
+			$this->protocolVersion = $match['protocol'];
+			$this->statusCode = $match['code'];
+			if (!empty($match['message'])) {
+				$this->statusDescription = $match['message'];
+			}
+		}
 	}
 }
