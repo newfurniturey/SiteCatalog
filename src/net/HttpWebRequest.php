@@ -62,7 +62,7 @@ class HttpWebRequest extends \SiteCatalog\net\WebRequest {
 	/**
 	 * The maximum number of redirects that the request follows.
 	 */
-	public $maximumAutomaticRedirections = 20;
+	public $maxAutoRedirects = 20;
 	
 	/**
 	 * The version of HTTP to use for the request.
