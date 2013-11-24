@@ -110,8 +110,7 @@ class HttpWebRequest extends \SiteCatalog\net\WebRequest {
 	}
 	
 	/**
-	 * Overwrites any header that was explicitly defined via one of the many
-	 * convenience-properties for this HttpWebRequest instance.
+	 * @inheritDoc
 	 */
 	protected function _setHeaders() {
 		static $map = array(
@@ -126,6 +125,7 @@ class HttpWebRequest extends \SiteCatalog\net\WebRequest {
 			'userAgent' => WebHeaders::UserAgent
 		);
 		
+		parent::_setHeaders();
 		foreach ($map as $property => $header) {
 			if (!empty($this->{$property})) {
 				$this->headers[$header] = $this->{$property};

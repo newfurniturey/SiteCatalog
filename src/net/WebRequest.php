@@ -57,4 +57,21 @@ abstract class WebRequest extends \SiteCatalog\core\Object {
 	 * @return WebResponse A WebReponse containing the response to the internet request.
 	 */
 	public abstract function getResponse();
+	
+	/**
+	 * Overwrites any header that was explicitly defined via one of the many
+	 * convenience-properties for this HttpWebRequest instance.
+	 */
+	protected function _setHeaders() {
+		static $map = array(
+			'contentLength' => WebHeaders::ContentLength,
+			'contentType' => WebHeaders::ContentType
+		);
+		
+		foreach ($map as $property => $header) {
+			if (!empty($this->{$property})) {
+				$this->headers[$header] = $this->{$property};
+			}
+		}
+	}
 }
