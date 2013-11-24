@@ -88,6 +88,9 @@ class HttpWebRequest extends \SiteCatalog\net\WebRequest {
 	
 	/**
 	 * @inheritDoc
+	 * 
+	 * @todo: Does this need to be abstracted out *and* in a sub-class? It could, potentially
+	 * go directly in WebRequest...
 	 */
 	public function getResponse() {
 		if (empty($this->requestUri)) {
