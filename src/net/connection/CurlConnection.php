@@ -9,6 +9,7 @@ use SiteCatalog\net\HttpWebRequest;
 use SiteCatalog\net\WebResponse;
 use SiteCatalog\net\HttpWebResponse;
 use SiteCatalog\net\connection\IConnection;
+use SiteCatalog\util\Net;
 
 class CurlConnection implements IConnection {
 	/**
@@ -47,32 +48,12 @@ class CurlConnection implements IConnection {
 			throw new CurlException($curlResponse['errmsg'], $curlResponse['errno']);
 		}
 		
-		$headers = $this->_buildHeaders($curlResponse);
+		$headers = $this->_processHeaders($curlResponse);
 		$response = $this->_createResponseObject($headers);
 		if ($response === null) {
 			throw new \SiteCatalog\core\exceptions\UnsupportedRequestType($this->_requestType);
 		}
 		return $response;
-	}
-	
-	/**
-	 * Parse the response to construct our header collection.
-	 * 
-	 * @param array $curlResponse                   An array containing all response data. {@see _exec()}
-	 * @return \SiteCatalog\net\WebHeaderCollection The constructed header collection.
-	 */
-	private function _buildHeaders(array $curlResponse) {
-		$headers = new WebHeaderCollection();
-		if (!empty($curlResponse['content']) && !empty($curlResponse['headers'])) {
-			// pull the list of headers from the top of the response-content
-			$responseHeaders = explode("\r\n", trim(substr($curlResponse['content'], 0, $curlResponse['headers']['header_size'])));
-			foreach ($responseHeaders as $header) {
-				// get each name:value line and add it to our collection
-				list($name, $value) = explode(':', $header, 2);
-				$headers[trim($name)] = trim($value);
-			}
-		}
-		return $headers;
 	}
 
 	/**
@@ -117,6 +98,20 @@ class CurlConnection implements IConnection {
 		curl_close($ch);
 		
 		return $response;
+	}
+	
+	/**
+	 * Parse the response to construct our header collection.
+	 * 
+	 * @param array $curlResponse                   An array containing all response data. {@see _exec()}
+	 * @return \SiteCatalog\net\WebHeaderCollection The constructed header collection; null if no response-data exists.
+	 */
+	private function _processHeaders(array $curlResponse) {
+		if (!empty($curlResponse['content']) && !empty($curlResponse['headers'])) {
+			$strHeaders = substr($curlResponse['content'], 0, $curlResponse['headers']['header_size']);
+			return Net::ProcessHeaders($strHeaders);
+		}
+		return null;
 	}
 	
 	/**
