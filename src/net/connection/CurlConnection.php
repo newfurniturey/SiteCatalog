@@ -45,7 +45,7 @@ class CurlConnection implements IConnection {
 	public function getResponse() {
 		$curlResponse = $this->_exec();
 		if ($curlResponse['errno']) {
-			throw new CurlException($curlResponse['errmsg'], $curlResponse['errno']);
+			throw new \SiteCatalog\core\exceptions\CurlException($curlResponse['errmsg'], $curlResponse['errno']);
 		}
 		
 		$headers = $this->_processHeaders($curlResponse);
