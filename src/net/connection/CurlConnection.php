@@ -53,6 +53,7 @@ class CurlConnection implements IConnection {
 		if ($response === null) {
 			throw new \SiteCatalog\core\exceptions\UnsupportedRequestType($this->_requestType);
 		}
+		$this->_populateResponseProperties($response, $curlResponse);
 		return $response;
 	}
 
@@ -98,6 +99,23 @@ class CurlConnection implements IConnection {
 		curl_close($ch);
 		
 		return $response;
+	}
+	
+	/**
+	 * Post-populates the Web Response object with different properties from the curl response.
+	 * 
+	 * @param \SiteCatalog\net\WebResponse $response The Web Response object to populate.
+	 * @param array $curlResponse                    An array containing all response data to use. {@see _exec()}
+	 */
+	private function _populateResponseProperties(WebResponse $response, array $curlResponse) {
+		$response->contentType = $curlResponse['headers']['content_type'];
+		$response->responseUri = $curlResponse['headers']['url'];
+		
+		// determine the content length
+		$contentLength = !empty($curlResponse['headers']['download_content_length']) ? $curlResponse['headers']['download_content_length'] : (
+			!empty($curlResponse['headers']['size_download']) ? $curlResponse['headers']['size_download'] : (strlen($curlResponse['content']) - $curlResponse['headers']['header_size'])
+		);
+		$response->contentLength = $contentLength;
 	}
 	
 	/**
