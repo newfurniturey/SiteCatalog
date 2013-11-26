@@ -48,8 +48,7 @@ class CurlConnection implements IConnection {
 			throw new \SiteCatalog\core\exceptions\CurlException($curlResponse['errmsg'], $curlResponse['errno']);
 		}
 		
-		$headers = $this->_processHeaders($curlResponse);
-		$response = $this->_createResponseObject($headers);
+		$response = $this->_createResponseObject($curlResponse);
 		if ($response === null) {
 			throw new \SiteCatalog\core\exceptions\UnsupportedRequestType($this->_requestType);
 		}
@@ -60,13 +59,14 @@ class CurlConnection implements IConnection {
 	/**
 	 * Generate a type-specific Web Response based on the current request.
 	 * 
-	 * @param \SiteCatalog\net\WebHeaderCollection $headers The response headers to create the object with.
-	 * @return \SiteCatalog\net\WebResponse                 The initialized response object.
+	 * @param array $curlResponse           An array containing all response data to use. {@see _exec()}
+	 * @return \SiteCatalog\net\WebResponse The initialized response object.
 	 */
-	private function _createResponseObject(WebHeaderCollection $headers) {
+	private function _createResponseObject(array $curlResponse) {
+		$headers = $this->_processHeaders($curlResponse);
 		switch ($this->_requestType) {
 			case 'SiteCatalog\net\HttpWebRequest':
-				return new HttpWebResponse($headers);
+				return new HttpWebResponse($headers, $curlResponse['content']);
 			default:
 				return null;
 		}
