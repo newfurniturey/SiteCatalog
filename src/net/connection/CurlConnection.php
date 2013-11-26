@@ -112,10 +112,10 @@ class CurlConnection implements IConnection {
 		$response->responseUri = $curlResponse['headers']['url'];
 		
 		// determine the content length
-		$contentLength = !empty($curlResponse['headers']['download_content_length']) ? $curlResponse['headers']['download_content_length'] : (
-			!empty($curlResponse['headers']['size_download']) ? $curlResponse['headers']['size_download'] : (strlen($curlResponse['content']) - $curlResponse['headers']['header_size'])
+		$contentLength = ($curlResponse['headers']['download_content_length'] > 0) ? $curlResponse['headers']['download_content_length'] : (
+			($curlResponse['headers']['size_download'] > 0) ? $curlResponse['headers']['size_download'] : (strlen($curlResponse['content']) - $curlResponse['headers']['header_size'])
 		);
-		$response->contentLength = $contentLength;
+		$response->contentLength = ($contentLength > 0) ? $contentLength : 0;
 	}
 	
 	/**
