@@ -35,6 +35,10 @@ class WebRequestTest extends PHPUnit_Framework_TestCase {
 		
 		// see if the request has a response set
 		$this->assertTrue($request->haveResponse);
+		
+		// check content-length
+		$this->assertTrue($response->contentLength > 0);
+		$this->assertEquals($response->contentLength, strlen((string)$response));
 	}
 	
 	/**
