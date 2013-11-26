@@ -64,9 +64,10 @@ class CurlConnection implements IConnection {
 	 */
 	private function _createResponseObject(array $curlResponse) {
 		$headers = $this->_processHeaders($curlResponse);
+		$contents = substr($curlResponse['content'], $curlResponse['headers']['header_size']);
 		switch ($this->_requestType) {
 			case 'SiteCatalog\net\HttpWebRequest':
-				return new HttpWebResponse($headers, $curlResponse['content']);
+				return new HttpWebResponse($headers, $contents);
 			default:
 				return null;
 		}
