@@ -12,6 +12,11 @@ abstract class WebResponse extends \SiteCatalog\core\Object {
 	public $contentLength = 0;
 	
 	/**
+	 * The data retreived from the Internet source.
+	 */
+	public $contents = null;
+	
+	/**
 	 * The content type of the data being received.
 	 */
 	public $contentType = null;
@@ -32,8 +37,9 @@ abstract class WebResponse extends \SiteCatalog\core\Object {
 	 * 
 	 * @param \SiteCatalog\net\WebHeadercollection $headers The headers to use for this response; if defined, all convenience properties
 	 *                                                      will automatically be populated.
+	 * @param string $contents The data retreived from the Internet source that makes the "body" of this response.
 	 */
-	public function __construct(WebHeaderCollection $headers = null) {
+	public function __construct(WebHeaderCollection $headers, $contents = null) {
 		if ($headers !== null) {
 			if (!($headers instanceof WebHeaderCollection)) {
 				throw new \InvalidArgumentException('$headers');
@@ -43,6 +49,15 @@ abstract class WebResponse extends \SiteCatalog\core\Object {
 		} else {
 			$this->headers = new WebHeaderCollection();
 		}
+		
+		$this->contents = $contents;
+	}
+	
+	/**
+	 * Sends the response-data as the contents of this object.
+	 */
+	public function __toString() {
+		return $this->contents;
 	}
 	
 	/**
