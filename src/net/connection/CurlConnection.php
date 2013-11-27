@@ -3,9 +3,7 @@
  * A curl implementation for internet requests.
  */
 namespace SiteCatalog\net\connection;
-use SiteCatalog\net\WebHeaderCollection;
 use SiteCatalog\net\WebRequest;
-use SiteCatalog\net\HttpWebRequest;
 use SiteCatalog\net\WebResponse;
 use SiteCatalog\net\HttpWebResponse;
 use SiteCatalog\net\connection\IConnection;
