@@ -28,6 +28,11 @@ abstract class WebResponse extends \SiteCatalog\core\Object {
 	public $headers = null;
 	
 	/**
+	 * Total time the response took to completion.
+	 */
+	public $responseTime = 0.0;
+	
+	/**
 	 * The URI of the Internet resource that actually responded to the request.
 	 */
 	public $responseUri = null;

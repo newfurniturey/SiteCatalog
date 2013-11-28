@@ -109,6 +109,7 @@ class CurlConnection implements IConnection {
 	private function _populateResponseProperties(WebResponse $response, array $curlResponse) {
 		$response->contentType = $curlResponse['headers']['content_type'];
 		$response->responseUri = $curlResponse['headers']['url'];
+		$response->responseTime = $curlResponse['headers']['total_time'];
 		
 		// determine the content length
 		$contentLength = ($curlResponse['headers']['download_content_length'] > 0) ? $curlResponse['headers']['download_content_length'] : (
