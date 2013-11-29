@@ -1,7 +1,7 @@
 <?php
 use util\Profiler;
 
-require('setup.php');
+require(dirname(dirname(__FILE__)) . '/setup.php');
 class ProfilerTest extends PHPUnit_Framework_TestCase {
 	
 	public function testStart() {

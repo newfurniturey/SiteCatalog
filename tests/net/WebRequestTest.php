@@ -4,7 +4,7 @@ use net\HttpWebRequest;
 use net\WebResponse;
 use net\HttpWebResponse;
 
-require('setup.php');
+require(dirname(dirname(__FILE__)) . '/setup.php');
 class WebRequestTest extends PHPUnit_Framework_TestCase {
 	
 	public function testCreateRequest() {

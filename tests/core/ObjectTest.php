@@ -1,7 +1,7 @@
 <?php
 use core\Object;
 
-require('setup.php');
+require(dirname(dirname(__FILE__)) . '/setup.php');
 
 // create a sample test-class
 class Test extends Object {

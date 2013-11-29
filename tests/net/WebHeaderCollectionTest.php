@@ -2,7 +2,7 @@
 use net\WebHeaderCollection;
 use net\WebHeaders;
 
-require('setup.php');
+require(dirname(dirname(__FILE__)) . '/setup.php');
 class WebHeaderCollectionTest extends PHPUnit_Framework_TestCase {
 	
 	public function testSetAndGet() {
