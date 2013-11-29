@@ -2,10 +2,10 @@
 /**
  * Provides a response from a Uniform Resource Identifier (URI).
  */
-namespace SiteCatalog\net;
-use SiteCatalog\net\WebHeaderCollection;
+namespace net;
+use net\WebHeaderCollection;
 
-abstract class WebResponse extends \SiteCatalog\core\Object {
+abstract class WebResponse extends \core\Object {
 	/**
 	 * The content length of the data being received.
 	 */
@@ -40,8 +40,8 @@ abstract class WebResponse extends \SiteCatalog\core\Object {
 	/**
 	 * Initializes a new WebResponse instance.
 	 * 
-	 * @param \SiteCatalog\net\WebHeadercollection $headers The headers to use for this response; if defined, all convenience properties
-	 *                                                      will automatically be populated.
+	 * @param \net\WebHeadercollection $headers The headers to use for this response; if defined, all convenience properties
+	 *                                          will automatically be populated.
 	 * @param string $contents The data retreived from the Internet source that makes the "body" of this response.
 	 */
 	public function __construct(WebHeaderCollection $headers, $contents = null) {

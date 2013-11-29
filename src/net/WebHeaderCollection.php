@@ -2,9 +2,9 @@
 /**
  * Hash-like collection that contains the protocol headers associated with a web request or response.
  */
-namespace SiteCatalog\net;
+namespace net;
 
-class WebHeaderCollection extends \SiteCatalog\core\Object implements \ArrayAccess, \Countable, \Iterator {
+class WebHeaderCollection extends \core\Object implements \ArrayAccess, \Countable, \Iterator {
 	/**
 	 * A key/value pair list of each defined header in the current collection.
 	 */

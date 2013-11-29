@@ -5,9 +5,9 @@
  * @todo: Add cookie management.
  * @todo: Add cache management.
  */
-namespace SiteCatalog\net;
+namespace net;
 
-class HttpWebResponse extends \SiteCatalog\net\WebResponse {
+class HttpWebResponse extends \net\WebResponse {
 	/**
 	 * The method that is used to encode the body of the response.
 	 */

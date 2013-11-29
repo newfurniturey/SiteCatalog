@@ -2,8 +2,8 @@
 /**
  * Interface to outline the structure required to make an Internet request.
  */
-namespace SiteCatalog\net\connection;
-use SiteCatalog\net\WebRequest;
+namespace net\connection;
+use net\WebRequest;
 
 interface IConnection {
 	
@@ -17,7 +17,7 @@ interface IConnection {
 	/**
 	 * Establishes the connection with the requested URI to build and return a response.
 	 * 
-	 * @return \SiteCatalog\net\WebResponse
+	 * @return \net\WebResponse
 	 */
 	public function getResponse();
 	

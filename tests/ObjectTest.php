@@ -1,5 +1,5 @@
 <?php
-use SiteCatalog\core\Object;
+use core\Object;
 
 require('setup.php');
 

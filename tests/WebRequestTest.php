@@ -1,8 +1,8 @@
 <?php
-use \SiteCatalog\net\WebRequest;
-use \SiteCatalog\net\HttpWebRequest;
-use \SiteCatalog\net\WebResponse;
-use \SiteCatalog\net\HttpWebResponse;
+use net\WebRequest;
+use net\HttpWebRequest;
+use net\WebResponse;
+use net\HttpWebResponse;
 
 require('setup.php');
 class WebRequestTest extends PHPUnit_Framework_TestCase {

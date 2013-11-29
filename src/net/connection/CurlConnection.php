@@ -2,17 +2,17 @@
 /**
  * A curl implementation for internet requests.
  */
-namespace SiteCatalog\net\connection;
-use SiteCatalog\net\WebRequest;
-use SiteCatalog\net\WebResponse;
-use SiteCatalog\net\HttpWebResponse;
-use SiteCatalog\net\connection\IConnection;
-use SiteCatalog\util\Net;
+namespace net\connection;
+use net\WebRequest;
+use net\WebResponse;
+use net\HttpWebResponse;
+use net\connection\IConnection;
+use util\Net;
 
 class CurlConnection implements IConnection {
 	/**
 	 * The current request object.
-	 * @var \SiteCatalog\net\WebRequest
+	 * @var \net\WebRequest
 	 */
 	private $_request = null;
 	
@@ -24,12 +24,12 @@ class CurlConnection implements IConnection {
 	/**
 	 * Initializes the curl-based implementation for an internet request.
 	 * 
-	 * @param \SiteCatalog\net\WebRequest $request The request-object to base the request on.
-	 * @throws \SiteCatalog\core\exceptions\ArgumentNullException
+	 * @param \net\WebRequest $request The request-object to base the request on.
+	 * @throws \core\exceptions\ArgumentNullException
 	 */
 	public function __construct(WebRequest $request) {
 		if ($request === null) {
-			throw new \SiteCatalog\core\exceptions\ArgumentNullException('$request');
+			throw new \core\exceptions\ArgumentNullException('$request');
 		}
 		
 		$this->_request = $request;
@@ -38,17 +38,17 @@ class CurlConnection implements IConnection {
 
 	/**
 	 * @inheritDoc
-	 * @throws \SiteCatalog\core\exceptions\UnsupportedRequestType
+	 * @throws \core\exceptions\UnsupportedRequestType
 	 */
 	public function getResponse() {
 		$curlResponse = $this->_exec();
 		if ($curlResponse['errno']) {
-			throw new \SiteCatalog\core\exceptions\CurlException($curlResponse['errmsg'], $curlResponse['errno']);
+			throw new \core\exceptions\CurlException($curlResponse['errmsg'], $curlResponse['errno']);
 		}
 		
 		$response = $this->_createResponseObject($curlResponse);
 		if ($response === null) {
-			throw new \SiteCatalog\core\exceptions\UnsupportedRequestType($this->_requestType);
+			throw new \core\exceptions\UnsupportedRequestType($this->_requestType);
 		}
 		$this->_populateResponseProperties($response, $curlResponse);
 		return $response;
@@ -58,13 +58,13 @@ class CurlConnection implements IConnection {
 	 * Generate a type-specific Web Response based on the current request.
 	 * 
 	 * @param array $curlResponse           An array containing all response data to use. {@see _exec()}
-	 * @return \SiteCatalog\net\WebResponse The initialized response object.
+	 * @return \net\WebResponse The initialized response object.
 	 */
 	private function _createResponseObject(array $curlResponse) {
 		$headers = $this->_processHeaders($curlResponse);
 		$contents = substr($curlResponse['content'], $curlResponse['headers']['header_size']);
 		switch ($this->_requestType) {
-			case 'SiteCatalog\net\HttpWebRequest':
+			case 'net\HttpWebRequest':
 				return new HttpWebResponse($headers, $contents);
 			default:
 				return null;
@@ -103,7 +103,7 @@ class CurlConnection implements IConnection {
 	/**
 	 * Post-populates the Web Response object with different properties from the curl response.
 	 * 
-	 * @param \SiteCatalog\net\WebResponse $response The Web Response object to populate.
+	 * @param \net\WebResponse $response The Web Response object to populate.
 	 * @param array $curlResponse                    An array containing all response data to use. {@see _exec()}
 	 */
 	private function _populateResponseProperties(WebResponse $response, array $curlResponse) {
@@ -122,7 +122,7 @@ class CurlConnection implements IConnection {
 	 * Parse the response to construct our header collection.
 	 * 
 	 * @param array $curlResponse                   An array containing all response data. {@see _exec()}
-	 * @return \SiteCatalog\net\WebHeaderCollection The constructed header collection; null if no response-data exists.
+	 * @return \net\WebHeaderCollection The constructed header collection; null if no response-data exists.
 	 */
 	private function _processHeaders(array $curlResponse) {
 		if (!empty($curlResponse['content']) && !empty($curlResponse['headers'])) {
@@ -163,7 +163,7 @@ class CurlConnection implements IConnection {
 		// add WebRequest and any sub-class-specific options
 		$this->_setWebRequestOptions($ch);
 		switch ($this->_requestType) {
-			case 'SiteCatalog\net\HttpWebRequest':
+			case 'net\HttpWebRequest':
 				$this->_setHttpWebRequestOptions($ch);
 				break;
 		}

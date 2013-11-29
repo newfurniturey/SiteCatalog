@@ -2,7 +2,7 @@
 /**
  * Provides a static interface for timing and profiling events.
  */
-namespace SiteCatalog\util;
+namespace util;
 
 class Profiler {
 	/**

@@ -1,5 +1,5 @@
 <?php
-use SiteCatalog\util\Profiler;
+use util\Profiler;
 
 require('setup.php');
 class ProfilerTest extends PHPUnit_Framework_TestCase {

@@ -2,9 +2,9 @@
 /**
  * Provides a static interface for net-related utilities.
  */
-namespace SiteCatalog\util;
-use SiteCatalog\net\WebHeaderCollection;
-use SiteCatalog\net\WebHeaders;
+namespace util;
+use net\WebHeaderCollection;
+use net\WebHeaders;
 
 class Net {
 	
@@ -12,7 +12,7 @@ class Net {
 	 * Converts a web-response style string of headers, "\r\n" delimited, into a WebHeaderCollection.
 	 * 
 	 * @param string $strHeaders                    Multi-line string of headers to process.
-	 * @return \SiteCatalog\net\WebHeaderCollection Populated collection of headers.
+	 * @return \net\WebHeaderCollection Populated collection of headers.
 	 */
 	public static function ProcessHeaders($strHeaders) {
 		$headerCollection = new WebHeaderCollection();

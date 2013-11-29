@@ -5,11 +5,11 @@
  * @todo: Add cookie management.
  * @todo: Split curl-usage into a separate interface to hide the implementation.
  */
-namespace SiteCatalog\net;
-use SiteCatalog\net\WebHeaders;
-use SiteCatalog\net\connection\CurlConnection;
+namespace net;
+use net\WebHeaders;
+use net\connection\CurlConnection;
 
-class HttpWebRequest extends \SiteCatalog\net\WebRequest {
+class HttpWebRequest extends \net\WebRequest {
 	/**
 	 * Convenience-property for the Accept HTTP header.
 	 */
@@ -104,7 +104,7 @@ class HttpWebRequest extends \SiteCatalog\net\WebRequest {
 	/**
 	 * Finalizes all request settings and makes the internet request.
 	 * 
-	 * @return \SiteCatalog\net\HttpWebResponse
+	 * @return \net\HttpWebResponse
 	 */
 	protected function _getResponse() {
 		$this->_setHeaders();

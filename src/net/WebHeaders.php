@@ -2,7 +2,7 @@
 /**
  * Common web headers for convenience access.
  */
-namespace SiteCatalog\net;
+namespace net;
 
 class WebHeaders {
 	const Accept = 'Accept';

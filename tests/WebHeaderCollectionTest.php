@@ -1,6 +1,6 @@
 <?php
-use SiteCatalog\net\WebHeaderCollection;
-use SiteCatalog\net\WebHeaders;
+use net\WebHeaderCollection;
+use net\WebHeaders;
 
 require('setup.php');
 class WebHeaderCollectionTest extends PHPUnit_Framework_TestCase {

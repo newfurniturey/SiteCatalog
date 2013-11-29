@@ -2,8 +2,8 @@
 /**
  * Exception for unsupported WebRequest classes being used.
  */
-namespace SiteCatalog\core\exceptions;
+namespace core\exceptions;
 
-class UnsupportedRequestTypeException extends \SiteCatalog\core\Exceptions\BaseException {
+class UnsupportedRequestTypeException extends \core\Exceptions\BaseException {
 	
 }

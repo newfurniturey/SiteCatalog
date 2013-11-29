@@ -2,7 +2,7 @@
 /**
  * The values of status codes defined in RFC 2616 for HTTP 1.1.
  */
-namespace SiteCatalog\net;
+namespace net;
 
 class HttpStatusCode {
 	// Informational 1xx

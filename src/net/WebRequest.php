@@ -2,9 +2,9 @@
 /**
  * Makes a request to a Uniform Resource Identifier (URI).
  */
-namespace SiteCatalog\net;
+namespace net;
 
-abstract class WebRequest extends \SiteCatalog\core\Object {
+abstract class WebRequest extends \core\Object {
 	/**
 	 * The content length of the request data being sent.
 	 */

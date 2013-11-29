@@ -2,7 +2,7 @@
 /**
  * Provides a base Exception implementation that requires a message to be populated.
  */
-namespace SiteCatalog\core\exceptions;
+namespace core\exceptions;
 
 abstract class BaseException extends \Exception {
 	/**

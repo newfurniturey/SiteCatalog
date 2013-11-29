@@ -2,7 +2,7 @@
 /**
  * Base object-class properties and definitions for all objects to share.
  */
-namespace SiteCatalog\core;
+namespace core;
 
 abstract class Object {
 	/**
