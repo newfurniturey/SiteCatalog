@@ -38,6 +38,23 @@ class SiteCatalog extends \core\Object {
 	}
 	
 	/**
+	 * Initiates a site-catalog scan originating with the current base URL.
+	 */
+	public function scan() {
+		$response = $this->_fetch($this->_baseUrl);
+	}
+	
+	/**
+	 * Fetches the specified URL.
+	 * 
+	 * @param string $url The URL to fetch.
+	 */
+	public function _fetch($url) {
+		$request = new HttpWebRequest($url);
+		return $request->getResponse();
+	}
+	
+	/**
 	 * Processes the URL to determine the base domain for the current catalog.
 	 * 
 	 * @param string $url The URL to process.
