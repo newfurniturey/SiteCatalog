@@ -41,7 +41,8 @@ class SiteCatalog extends \core\Object {
 	 * Initiates a site-catalog scan originating with the current base URL.
 	 */
 	public function scan() {
-		$response = $this->_fetch($this->_baseUrl);
+		$queue = array($this->_baseUrl);
+		$this->_scan($queue);
 	}
 	
 	/**
@@ -69,5 +70,19 @@ class SiteCatalog extends \core\Object {
 		
 		$this->_baseDomain = $parts['host'];
 		$this->_baseUrl = $url;
+	}
+	
+	/**
+	 * Processes the entire queue of URLs to scan until it's empty.
+	 * 
+	 * @param array $queue A first-in-first-out list of URLs to scan.
+	 */
+	private function _scan(array $queue = array()) {
+		$url = null;
+		while (($url = array_shift($queue)) !== null) {
+			$response = $this->_fetch($url);
+			
+			// @todo Process the response and populate the scanning queue
+		}
 	}
 }
