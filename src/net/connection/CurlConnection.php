@@ -1,6 +1,9 @@
 <?php
 /**
  * A curl implementation for internet requests.
+ * 
+ * @todo Implement custom request methods (POST, DELETE, etc)
+ * @todo Implement PUT and file attachments
  */
 namespace net\connection;
 use net\WebRequest;
