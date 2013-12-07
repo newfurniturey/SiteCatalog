@@ -3,6 +3,7 @@
  * An automated and interactive tool for cataloging web applications.
  */
 namespace net\sitecatalog;
+use util\Html;
 use util\String;
 
 class SiteCatalog extends \core\Object {
@@ -56,6 +57,59 @@ class SiteCatalog extends \core\Object {
 	}
 	
 	/**
+	 * Processes the response text for URLs in HTML, CSS, Javascript, etc.
+	 * 
+	 * @param string $response The response to scan.
+	 * return array            A list of all URLs found.
+	 */
+	private function _findUrlsInResponse($response) {
+		$urls = array();
+		
+		// create the document model
+		$document = new Html();
+		$document->loadHTML($response);
+
+		// pull all <a> tag hrefs
+		// @todo Put this in the util\Html class
+		foreach ($document->getElementsByTagName('a') as $a) {
+			$href = $a->getAttribute('href');
+			if (!empty($href)) {
+				$urls[] = $href;
+			}
+		}
+
+		// pull all <img> tag srcs
+		// @todo Put this in the util\Html class
+		foreach ($document->getElementsByTagName('img') as $img) {
+			$src = $img->getAttribute('src');
+			if (!empty($src)) {
+				$urls[] = $src;
+			}
+		}
+
+		// pull all <link> tag hrefs
+		// @todo Put this in the util\Html class
+		foreach ($document->getElementsByTagName('link') as $link) {
+			$href = $link->getAttribute('href');
+			if (!empty($href)) {
+				$urls[] = $href;
+			}
+		}
+
+		// pull all <script> tag srcs
+		// @todo Put this in the util\Html class
+		foreach ($document->getElementsByTagName('script') as $script) {
+			$src = $script->getAttribute('src');
+			if (!empty($src)) {
+				$urls[] = $src;
+			}
+		}
+		
+		// return a unique list of URLs
+		return array_unique($urls);
+	}
+	
+	/**
 	 * Processes the URL to determine the base domain for the current catalog.
 	 * 
 	 * @param string $url The URL to process.
@@ -82,7 +136,9 @@ class SiteCatalog extends \core\Object {
 		while (($url = array_shift($queue)) !== null) {
 			$response = $this->_fetch($url);
 			
-			// @todo Process the response and populate the scanning queue
+			$urls = $this->_findUrlsInResponse($response);
+			// @todo map the URLs to the current URL (for tree generation)
+			// @todo filter URLs to only ones we haven't seen before
 		}
 	}
 }
