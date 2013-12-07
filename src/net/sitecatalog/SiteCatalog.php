@@ -50,7 +50,7 @@ class SiteCatalog extends \core\Object {
 	 * 
 	 * @param string $url The URL to fetch.
 	 */
-	public function _fetch($url) {
+	private function _fetch($url) {
 		$request = new HttpWebRequest($url);
 		return $request->getResponse();
 	}
