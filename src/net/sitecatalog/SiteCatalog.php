@@ -3,6 +3,7 @@
  * An automated and interactive tool for cataloging web applications.
  */
 namespace net\sitecatalog;
+use net\HttpWebRequest;
 use util\Html;
 use util\String;
 
