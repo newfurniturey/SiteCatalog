@@ -8,6 +8,11 @@ use util\String;
 
 class SiteCatalog extends \core\Object {
 	/**
+	 * Holds a two-level tree that associates a single URL with all URLs found within it.
+	 */
+	public $tree = array();
+	
+	/**
 	 * The base-domain of the originating URL to scan.
 	 */
 	private $_baseDomain = null;
@@ -137,7 +142,7 @@ class SiteCatalog extends \core\Object {
 			$response = $this->_fetch($url);
 			
 			$urls = $this->_findUrlsInResponse($response);
-			// @todo map the URLs to the current URL (for tree generation)
+			$this->tree[$url] = $urls;
 			// @todo filter URLs to only ones we haven't seen before
 		}
 	}
