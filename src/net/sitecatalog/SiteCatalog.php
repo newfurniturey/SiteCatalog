@@ -71,45 +71,10 @@ class SiteCatalog extends \core\Object {
 	private function _findUrlsInResponse($response) {
 		$urls = array();
 		
-		// create the document model
+		// create the document model and fetch the contained URLs
 		$document = new Html();
 		$document->loadHTML($response);
-
-		// pull all <a> tag hrefs
-		// @todo Put this in the util\Html class
-		foreach ($document->getElementsByTagName('a') as $a) {
-			$href = $a->getAttribute('href');
-			if (!empty($href)) {
-				$urls[] = $href;
-			}
-		}
-
-		// pull all <img> tag srcs
-		// @todo Put this in the util\Html class
-		foreach ($document->getElementsByTagName('img') as $img) {
-			$src = $img->getAttribute('src');
-			if (!empty($src)) {
-				$urls[] = $src;
-			}
-		}
-
-		// pull all <link> tag hrefs
-		// @todo Put this in the util\Html class
-		foreach ($document->getElementsByTagName('link') as $link) {
-			$href = $link->getAttribute('href');
-			if (!empty($href)) {
-				$urls[] = $href;
-			}
-		}
-
-		// pull all <script> tag srcs
-		// @todo Put this in the util\Html class
-		foreach ($document->getElementsByTagName('script') as $script) {
-			$src = $script->getAttribute('src');
-			if (!empty($src)) {
-				$urls[] = $src;
-			}
-		}
+		$urls = $document->getContainedUrls(true);
 		
 		// return a unique list of URLs
 		return array_unique($urls);

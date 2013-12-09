@@ -28,6 +28,28 @@ class Html extends \DOMDocument {
 	}
 	
 	/**
+	 * Combines the `href` and `src` attributes on tags to build a general list of URLs found
+	 * in the given HTML's source.
+	 * 
+	 * @param boolean $returnArray if true, an array-list of all URLs will be returned; otherwise the DOMNodeList
+	 * @return mixed
+	 */
+	public function getContainedUrls($returnArray = false) {
+		static $path = '//*/@href | //*/@src | //*/@xmlns';
+		
+		$nodes = $this->query($path);
+		if (!$returnArray) {
+			return $nodes;
+		} else {
+			$urls = array();
+			foreach ($this->query($path) as $node) {
+				$urls[] = $node->nodeValue;
+			}
+			return $urls;
+		}
+	}
+	
+	/**
 	 * Evaluate an XPath-query and return the results, if any.
 	 * 
 	 * @param string $query XPath-query to run.
