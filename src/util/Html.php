@@ -5,6 +5,12 @@
 namespace util;
 
 class Html extends \DOMDocument {
+	/**
+	 * XPath object for performing xpath queries.
+	 * 
+	 * @var \DOMXPath 
+	 */
+	private $_domXPath = null;
 	
 	/**
 	 * Run a few extensions upon initialization.
@@ -21,4 +27,17 @@ class Html extends \DOMDocument {
 		$this->registerNodeClass('\DOMDocument', get_called_class());
 	}
 	
+	/**
+	 * Evaluate an XPath-query and return the results, if any.
+	 * 
+	 * @param string $query XPath-query to run.
+	 * @return \DOMNodeList A list of all found nodes matching the query.
+	 */
+	public function query($query) {
+		if ($this->_domXPath === null) {
+			$this->_domXPath = new \DOMXPath($this);
+		}
+		
+		return $this->_domXPath->evaluate($query);
+	}
 }
