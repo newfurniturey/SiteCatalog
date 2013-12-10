@@ -22,6 +22,19 @@ class HtmlTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(true, $loaded);
 	}
 	
+	public function testParseLinks() {
+		$path = $this->_getHtml('links', true);
+		
+		$html = new Html();
+		$loaded = $html->loadHTMLFile($path);
+		
+		$this->assertEquals(true, $loaded);
+		
+		$links = $html->getContainedUrls(true);
+		$this->assertInternalType('array', $links);
+		$this->assertTrue(count($links) > 0);
+	}
+	
 	private function _getHtml($type, $returnFileName = false) {
 		$path = sprintf('%s/util/HtmlTestDocuments/%s.html', TESTS_ROOT, $type);
 		if (!file_exists($path)) {
