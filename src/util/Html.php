@@ -33,6 +33,7 @@ class Html extends \DOMDocument {
 	 * 
 	 * @param boolean $returnArray if true, an array-list of all URLs will be returned; otherwise the DOMNodeList
 	 * @return mixed
+	 * @todo Implement comment-parsing as well (which may require a custom DOMNodesList =/)
 	 */
 	public function getContainedUrls($returnArray = false) {
 		static $path = '
@@ -45,7 +46,9 @@ class Html extends \DOMDocument {
 			| //*/param[@name="src" or @name="url" or @name="filename"]/@value
 		';
 		
+		// get all straightforward matches of the path
 		$nodes = $this->query($path);
+		
 		if (!$returnArray) {
 			return $nodes;
 		} else {

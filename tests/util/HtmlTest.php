@@ -33,6 +33,14 @@ class HtmlTest extends PHPUnit_Framework_TestCase {
 		$links = $html->getContainedUrls(true);
 		$this->assertInternalType('array', $links);
 		$this->assertTrue(count($links) > 0);
+		
+		$comments = $html->query('//comment()');
+		foreach ($comments as $comment) {
+			$chtml = new Html();
+			if ($chtml->loadHTML($comment->nodeValue)) {
+				$links = array_merge($links, $chtml->getContainedUrls(true));
+			}
+		}
 	}
 	
 	private function _getHtml($type, $returnFileName = false) {
