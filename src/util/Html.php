@@ -35,7 +35,15 @@ class Html extends \DOMDocument {
 	 * @return mixed
 	 */
 	public function getContainedUrls($returnArray = false) {
-		static $path = '//*/@href | //*/@src | //*/@xmlns';
+		static $path = '
+			//*/@href
+			| //*/@src
+			| //*/@xmlns
+			| //*/object/@codebase
+			| //*/object/@data
+			| //*/embed/@pluginspage
+			| //*/param[@name="src" or @name="url" or @name="filename"]/@value
+		';
 		
 		$nodes = $this->query($path);
 		if (!$returnArray) {
