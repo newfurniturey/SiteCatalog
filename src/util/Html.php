@@ -6,6 +6,11 @@ namespace util;
 
 class Html extends \DOMDocument {
 	/**
+	 * Flag to indicate whether the comments have been embedded as regular nodes.
+	 */
+	private $_commentsEmbedded = false;
+	
+	/**
 	 * XPath object for performing xpath queries.
 	 * 
 	 * @var \DOMXPath 
@@ -33,7 +38,6 @@ class Html extends \DOMDocument {
 	 * 
 	 * @param boolean $returnArray if true, an array-list of all URLs will be returned; otherwise the DOMNodeList
 	 * @return mixed
-	 * @todo Implement comment-parsing as well (which may require a custom DOMNodesList =/)
 	 */
 	public function getContainedUrls($returnArray = false) {
 		static $path = '
@@ -45,6 +49,9 @@ class Html extends \DOMDocument {
 			| //*/embed/@pluginspage
 			| //*/param[@name="src" or @name="url" or @name="filename"]/@value
 		';
+		
+		// make sure to embed all comments in the document before processing
+		$this->_embedComments();
 		
 		// get all straightforward matches of the path
 		$nodes = $this->query($path);
@@ -72,5 +79,33 @@ class Html extends \DOMDocument {
 		}
 		
 		return $this->_domXPath->evaluate($query);
+	}
+	
+	/**
+	 * Converts any found comment-nodes into regular HTML and appends them to the
+	 * main body.
+	 */
+	private function _embedComments() {
+		if ($this->_commentsEmbedded === true) {
+			// we've already embedded comments =]
+			return;
+		}
+		
+		$comments = $this->query('//comment()');
+		foreach ($comments as $comment) {
+			$commentHtml = new Html();
+			if ($commentHtml->loadHTML($comment->nodeValue)) {
+				foreach ($commentHtml->childNodes as $commentNode) {
+					if (($newNode = $this->importNode($commentNode, true)) === false) {
+						// if we can't import the node, skip it
+						continue;
+					}
+					$this->documentElement->appendChild($newNode);
+				}
+			}
+		}
+		$this->saveHTML();
+		
+		$this->_commentsEmbedded = true;
 	}
 }
