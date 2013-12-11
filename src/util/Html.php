@@ -66,6 +66,38 @@ class Html extends \DOMDocument {
 			return $urls;
 		}
 	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function load($filename, $options = 0) {
+		$this->_reset();
+		return parent::load($filename, $options);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function loadHTML($source, $options = 0) {
+		$this->_reset();
+		return parent::loadHTML($source, $options);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function loadHTMLFile($filename, $options = 0) {
+		$this->_reset();
+		return parent::loadHTMLFile($filename, $options);
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function loadXML($source, $options = 0) {
+		$this->_reset();
+		return parent::loadXML($source, $options);
+	}
 	
 	/**
 	 * Evaluate an XPath-query and return the results, if any.
@@ -107,5 +139,13 @@ class Html extends \DOMDocument {
 		$this->saveHTML();
 		
 		$this->_commentsEmbedded = true;
+	}
+	
+	/**
+	 * Reset specific flags that are relevant to a single document.
+	 */
+	private function _reset() {
+		$this->_domXPath = null;
+		$this->_commentsEmbedded = false;
 	}
 }
