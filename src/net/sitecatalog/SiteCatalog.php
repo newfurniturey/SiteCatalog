@@ -69,8 +69,6 @@ class SiteCatalog extends \core\Object {
 	 * return array            A list of all URLs found.
 	 */
 	private function _findUrlsInResponse($response) {
-		$urls = array();
-		
 		// create the document model and fetch the contained URLs
 		$document = new Html();
 		$document->loadHTML($response);
