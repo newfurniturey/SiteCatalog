@@ -58,7 +58,7 @@ class PublicSuffixList {
 		$listContents = str_replace("\r\n", "\n", $listContents);
 		
 		// remove all empty and comment lines from the list
-		$listContents = trim(preg_replace('/^([^a-z].*)?\n/', '', $listContents));
+		$listContents = trim(preg_replace('/^(\/\/(.*?))?(\n|$)/m', '', $listContents));
 		
 		// make us a list!
 		return array_flip(explode("\n", $listContents));
