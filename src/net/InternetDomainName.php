@@ -7,9 +7,6 @@ namespace net;
 use net\connection\CurlConnection;
 
 class InternetDomainName {
-	/**
-	 * Location of a full list of all public suffixes.
-	 */
-	private $_publicSuffixAddress = 'http://mxr.mozilla.org/mozilla-central/source/netwerk/dns/effective_tld_names.dat?raw=1';
+
 	
 }
