@@ -5,13 +5,12 @@
  * @todo Implement file (or database) caching for the list.
  */
 namespace net;
-use net\connection\CurlConnection;
 
 class PublicSuffixList {
 	/**
 	 * Hash-like array of all loaded Public Suffixes.
 	 */
-	private static $_list = array();
+	private static $_listHash = array();
 	
 	/**
 	 * Location of a full list of all public suffixes.
@@ -26,10 +25,28 @@ class PublicSuffixList {
 	public static function refreshList() {
 		$listContents = self::_fetchList();
 		if ($listContents !== null) {
-			self::$_list = self::_parseListIntoHash($listContents);
+			$cleanedContents = self::_cleanListContents($listContents);
+			self::_parseListIntoHash($cleanedContents);
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * Removes negligible lines from the loaded list-contents for faster processing.
+	 * 
+	 * @param string $listContents The string-version of the Public Suffix list.
+	 * @return array               Cleaned array.
+	 */
+	private static function _cleanListContents($listContents) {
+		// convert \r\n to just \n (so we don't have to worry about mixed endings
+		$listContents = str_replace("\r\n", "\n", $listContents);
+		
+		// remove all empty and comment lines from the list
+		$listContents = trim(preg_replace('/^(\/\/(.*?))?(\n|$)/m', '', $listContents));
+		
+		// separate each line into an array
+		return explode("\n", $listContents);
 	}
 	
 	/**
@@ -48,19 +65,17 @@ class PublicSuffixList {
 	}
 	
 	/**
-	 * Parses the string-version of the list into a hash-style array for fast lookups.
+	 * Converts the Public Suffix list into a distinct hash-type array.
 	 * 
-	 * @param string $listContents The string-version of the Public Suffix list.
-	 * @return array               Converted array.
+	 * This conversion will remove wildcard and exclamation mark suffixes for faster
+	 * and more direct lookups.
+	 * 
+	 * @param array $listContents An array of every Public Suffix.
 	 */
-	private static function _parseListIntoHash($listContents) {
-		// convert \r\n to just \n (so we don't have to worry about mixed endings
-		$listContents = str_replace("\r\n", "\n", $listContents);
-		
-		// remove all empty and comment lines from the list
-		$listContents = trim(preg_replace('/^(\/\/(.*?))?(\n|$)/m', '', $listContents));
-		
-		// make us a list!
-		return array_flip(explode("\n", $listContents));
+	private static function _parseListIntoHash(array $listContents) {
+		self::$_listHash = array_filter($listContents, function($node) {
+			$firstChar = substr($node, 0, 1);
+			return (($firstChar != '*') && ($firstChar != '!'));
+		});
 	}
 }
