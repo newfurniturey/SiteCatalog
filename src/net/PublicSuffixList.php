@@ -73,9 +73,15 @@ class PublicSuffixList {
 	 * @param array $listContents An array of every Public Suffix.
 	 */
 	private static function _parseListIntoHash(array $listContents) {
-		self::$_listHash = array_filter($listContents, function($node) {
+		$list = array();
+		foreach ($listContents as $node) {
 			$firstChar = substr($node, 0, 1);
-			return (($firstChar != '*') && ($firstChar != '!'));
-		});
+			if (($firstChar === '*') || ($firstChar === '!')) {
+				$list[substr($node, 2)] = true;
+			} else {
+				$list[$node] = true;
+			}
+		}
+		self::$_listHash = $list;
 	}
 }
