@@ -32,6 +32,7 @@ class PublicSuffixList {
 		if ($listContents !== null) {
 			$cleanedContents = self::_cleanListContents($listContents);
 			self::_parseListIntoHash($cleanedContents);
+			self::_parseListIntoTree($cleanedContents);
 			return true;
 		}
 		return false;
@@ -95,6 +96,24 @@ class PublicSuffixList {
 	 * @param array $listContents An array of every Public Suffix.
 	 */
 	private static function _parseListIntoTree(array $listContents) {
-		
+		self::$_listTree = array();
+		foreach ($listContents as $node) {
+			$nodeParts = array_reverse(explode('.', $node));
+			
+			$top = &self::$_listTree;
+			foreach ($nodeParts as $nodePart) {
+				if (substr($nodePart, 0, 1) === '!') {
+					// remove the exception rule but keep the subdomain name
+					$nodePart = substr($nodePart, 1);
+				}
+				
+				if (!isset($top[$nodePart])) {
+					// add the domain to the tree
+					$top[$nodePart] = array();
+				}
+				$top = &$top[$nodePart];
+			}
+			$top = &self::$_listTree[array_pop($nodeParts)];
+		}
 	}
 }
