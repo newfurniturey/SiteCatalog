@@ -8,14 +8,19 @@ namespace net;
 
 class PublicSuffixList {
 	/**
+	 * Flag indicating whether the list is initialized or not.
+	 */
+	private static $_initialized = false;
+	
+	/**
 	 * Hash-like array of all loaded Public Suffixes.
 	 */
-	private static $_listHash = array();
+	protected static $_listHash = array();
 	
 	/**
 	 * Tree array of all loaded Public Suffixes.
 	 */
-	private static $_listTree = array();
+	protected static $_listTree = array();
 	
 	/**
 	 * Location of a full list of all public suffixes.
@@ -27,13 +32,17 @@ class PublicSuffixList {
 	 * 
 	 * @return boolean true if the list was refreshed; otherwise false
 	 */
-	public static function refreshList() {
-		$listContents = self::_fetchList();
-		if ($listContents !== null) {
-			$cleanedContents = self::_cleanListContents($listContents);
-			self::_parseListIntoHash($cleanedContents);
-			self::_parseListIntoTree($cleanedContents);
+	public static function initList() {
+		if (PublicSuffixList::$_initialized) {
 			return true;
+		}
+		
+		$listContents = static::_fetchList();
+		if ($listContents !== null) {
+			$cleanedContents = static::_cleanListContents($listContents);
+			static::_parseListIntoHash($cleanedContents);
+			static::_parseListIntoTree($cleanedContents);
+			return (PublicSuffixList::$_initialized = true);
 		}
 		return false;
 	}
@@ -62,7 +71,7 @@ class PublicSuffixList {
 	 */
 	private static function _fetchList() {
 		try {
-			$request = new HttpWebRequest(self::$_publicSuffixAddress);
+			$request = new HttpWebRequest(PublicSuffixList::$_publicSuffixAddress);
 			$response = $request->getResponse();
 			return $response->contents;
 		} catch (\Exception $e) {
@@ -79,13 +88,13 @@ class PublicSuffixList {
 	 * @param array $listContents An array of every Public Suffix.
 	 */
 	private static function _parseListIntoHash(array $listContents) {
-		self::$_listHash = array();
+		static::$_listHash = array();
 		foreach ($listContents as $node) {
 			$firstChar = substr($node, 0, 1);
 			if (($firstChar === '*') || ($firstChar === '!')) {
-				self::$_listHash[substr($node, 2)] = true;
+				static::$_listHash[substr($node, 2)] = true;
 			} else {
-				self::$_listHash[$node] = true;
+				static::$_listHash[$node] = true;
 			}
 		}
 	}
@@ -96,11 +105,11 @@ class PublicSuffixList {
 	 * @param array $listContents An array of every Public Suffix.
 	 */
 	private static function _parseListIntoTree(array $listContents) {
-		self::$_listTree = array();
+		static::$_listTree = array();
 		foreach ($listContents as $node) {
 			$nodeParts = array_reverse(explode('.', $node));
 			
-			$top = &self::$_listTree;
+			$top = &static::$_listTree;
 			foreach ($nodeParts as $nodePart) {
 				if (substr($nodePart, 0, 1) === '!') {
 					// remove the exception rule but keep the subdomain name
@@ -113,7 +122,7 @@ class PublicSuffixList {
 				}
 				$top = &$top[$nodePart];
 			}
-			$top = &self::$_listTree[array_pop($nodeParts)];
+			$top = &static::$_listTree[array_pop($nodeParts)];
 		}
 	}
 }
