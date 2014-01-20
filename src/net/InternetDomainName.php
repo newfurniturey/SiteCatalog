@@ -14,7 +14,28 @@ class InternetDomainName extends PublicSuffixList {
 	 * @return string      Public Suffix, if found.
 	 */
 	public static function getPublicSuffix($host) {
-		return null;
+		if (!strpos($host, '.')) {
+			// if there is no `.` *or* if the first `.` is the leading character, reject immediately
+			return null;
+		}
+		
+		$publicSuffix = array();
+		$hostParts = array_reverse(explode('.', strtolower($host)));
+		$top = &static::$_listTree;
+		foreach ($hostParts as $hostPart) {
+			if (!isset($top[$hostPart])) {
+				// current part is not within the tree; check if we have a wildcard
+				if (isset($top['*'])) {
+					// we have a wildcard so the current part is part of the suffix
+					$publicSuffix[] = $hostPart;
+				}
+				break;
+			}
+			$publicSuffix[] = $hostPart;
+			$top = &$top[$hostPart];
+		}
+		
+		return implode('.', array_reverse($publicSuffix));
 	}
 	
 	/**
