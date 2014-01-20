@@ -13,6 +13,11 @@ class PublicSuffixList {
 	private static $_listHash = array();
 	
 	/**
+	 * Tree array of all loaded Public Suffixes.
+	 */
+	private static $_listTree = array();
+	
+	/**
 	 * Location of a full list of all public suffixes.
 	 */
 	private static $_publicSuffixAddress = 'http://mxr.mozilla.org/mozilla-central/source/netwerk/dns/effective_tld_names.dat?raw=1';
@@ -82,5 +87,14 @@ class PublicSuffixList {
 				self::$_listHash[$node] = true;
 			}
 		}
+	}
+	
+	/**
+	 * Converts the Public Suffix list into a top-level-down tree.
+	 * 
+	 * @param array $listContents An array of every Public Suffix.
+	 */
+	private static function _parseListIntoTree(array $listContents) {
+		
 	}
 }
