@@ -35,7 +35,7 @@ class InternetDomainName extends PublicSuffixList {
 			$top = &$top[$hostPart];
 		}
 		
-		$result = implode('.', array_reverse($publicSuffix));
+		$result = empty($publicSuffix) ? null : implode('.', array_reverse($publicSuffix));
 		return ($result === $host) ? null : $result;
 	}
 	
@@ -57,7 +57,13 @@ class InternetDomainName extends PublicSuffixList {
 	 * @return string      TLD, if found.
 	 */
 	public static function getTopLevelDomain($host) {
-		return null;
+		$publicSuffix = static::getPublicSuffix($host);
+		if ($publicSuffix === null) {
+			return null;
+		}
+		
+		$hostParts = explode('.', strtolower(substr($host, 0, strlen($host) - strlen($publicSuffix) - 1)));
+		return sprintf('%s.%s', end($hostParts), $publicSuffix);
 	}
 	
 }
