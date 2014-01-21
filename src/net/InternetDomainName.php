@@ -22,7 +22,7 @@ class InternetDomainName extends PublicSuffixList {
 		$publicSuffix = array();
 		$hostParts = array_reverse(explode('.', strtolower($host)));
 		$top = &static::$_listTree;
-		foreach ($hostParts as $hostPart) {
+		while (($hostPart = array_shift($hostParts))) {
 			if (!isset($top[$hostPart])) {
 				// current part is not within the tree; check if we have a wildcard
 				if (isset($top['*'])) {
@@ -35,7 +35,8 @@ class InternetDomainName extends PublicSuffixList {
 			$top = &$top[$hostPart];
 		}
 		
-		return implode('.', array_reverse($publicSuffix));
+		$result = implode('.', array_reverse($publicSuffix));
+		return ($result === $host) ? null : $result;
 	}
 	
 	/**
