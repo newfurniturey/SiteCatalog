@@ -50,7 +50,12 @@ class InternetDomainName extends PublicSuffixList {
 	 * @return string      Subdomain, if found.
 	 */
 	public static function getSubDomain($host) {
-		return null;
+		$topLevelDomain = static::getTopLevelDomain($host);
+		if (($topLevelDomain === null) || ($topLevelDomain === $host)) {
+			return null;
+		}
+		
+		return substr($host, 0, strlen($host) - strlen($topLevelDomain) - 1);
 	}
 	
 	/**
