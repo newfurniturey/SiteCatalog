@@ -30,6 +30,9 @@ class InternetDomainName extends PublicSuffixList {
 					$publicSuffix[] = $hostPart;
 				}
 				break;
+			} else if (isset($top[$hostPart]['!'])) {
+				// stop processing further parts when an exception rule is found
+				break;
 			}
 			$publicSuffix[] = $hostPart;
 			$top = &$top[$hostPart];
@@ -58,10 +61,10 @@ class InternetDomainName extends PublicSuffixList {
 	 */
 	public static function getTopLevelDomain($host) {
 		$publicSuffix = static::getPublicSuffix($host);
-		if ($publicSuffix === null) {
+		if (($publicSuffix === null) || ($host === $publicSuffix)) {
 			return null;
 		}
-		
+
 		$hostParts = explode('.', strtolower(substr($host, 0, strlen($host) - strlen($publicSuffix) - 1)));
 		return sprintf('%s.%s', end($hostParts), $publicSuffix);
 	}

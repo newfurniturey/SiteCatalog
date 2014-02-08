@@ -111,14 +111,19 @@ class PublicSuffixList {
 			
 			$top = &static::$_listTree;
 			foreach ($nodeParts as $nodePart) {
+				$isExceptionRule = false;
 				if (substr($nodePart, 0, 1) === '!') {
 					// remove the exception rule but keep the subdomain name
 					$nodePart = substr($nodePart, 1);
+					$isExceptionRule = true;
 				}
 				
 				if (!isset($top[$nodePart])) {
 					// add the domain to the tree
 					$top[$nodePart] = array();
+					if ($isExceptionRule) {
+						$top[$nodePart]['!'] = array();
+					}
 				}
 				$top = &$top[$nodePart];
 			}
