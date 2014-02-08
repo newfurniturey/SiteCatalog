@@ -26,6 +26,18 @@ class InternetDomainNameTest extends PHPUnit_Framework_TestCase {
 		$this->assertEquals(InternetDomainName::getPublicSuffix('a.b.example.uk.com'), 'uk.com');
 		$this->assertEquals(InternetDomainName::getPublicSuffix('test.ac'), 'ac');
 	}
+	
+	/**
+	 * @depends testInit
+	 */
+	public function testSubdomain() {
+		$this->assertEquals(InternetDomainName::getSubDomain('example.com'), null);
+		$this->assertEquals(InternetDomainName::getSubDomain('a.example.com'), 'a');
+		$this->assertEquals(InternetDomainName::getSubDomain('a.b.example.com'), 'a.b');
+		$this->assertEquals(InternetDomainName::getSubDomain('b.c.cy'), null);
+		$this->assertEquals(InternetDomainName::getSubDomain('a.b.c.cy'), 'a');
+		$this->assertEquals(InternetDomainName::getSubDomain('www.city.kobe.jp'), 'www');
+	}
 
 	/**
 	 * @depends testInit
