@@ -4,6 +4,7 @@
  */
 namespace net\sitecatalog;
 use net\HttpWebRequest;
+use net\InternetDomainName;
 use util\Html;
 use util\String;
 
@@ -14,7 +15,7 @@ class SiteCatalog extends \core\Object {
 	public $tree = array();
 	
 	/**
-	 * The base-domain of the originating URL to scan.
+	 * The base-domain info of the originating URL to scan.
 	 */
 	private $_baseDomain = null;
 	
@@ -53,6 +54,41 @@ class SiteCatalog extends \core\Object {
 	}
 	
 	/**
+	 * Parses the given list of URL parts into a host-to-path tree.
+	 * 
+	 * @param array $urlParts URL parts to process.
+	 */
+	private function _addUrlToTree(array $urlParts) {
+		// strip any leading 'www.'
+		$host = (substr($urlParts['host'], 0, 4) === 'www.') ? substr($urlParts['host'], 4) : $urlParts['host'];
+		if (!isset($this->tree[$host])) {
+			$this->tree[$host] = array();
+		}
+		$top = &$this->tree[$host];
+		
+		// process any "path" in the current URL by building a full folder-structure layout
+		if (isset($urlParts['path'])) {
+			$parts = explode('/', trim($urlParts['path'], '/'));
+			foreach ($parts as $part) {
+				if (!isset($top[$part])) {
+					$top[$part] = array();
+				}
+				$top = &$top[$part];
+			}
+		}
+		
+		// process any query-string in the current URL and keep a full list of each seen for the current path
+		if (isset($urlParts['query'])) {
+			if (!isset($top['?'])) {
+				$top['?'] = array();
+			}
+			if (!in_array($urlParts['query'], $top['?'])) {
+				$top['?'][] = $urlParts['query'];
+			}
+		}
+	}
+	
+	/**
 	 * Fetches the specified URL.
 	 * 
 	 * @param string $url      The URL to fetch.
@@ -61,6 +97,44 @@ class SiteCatalog extends \core\Object {
 	private function _fetch($url) {
 		$request = new HttpWebRequest($url);
 		return $request->getResponse();
+	}
+	
+	/**
+	 * Processes the given list of URLs to determine their scheme, host and path.
+	 * 
+	 * @param array $urls URLs to process.
+	 */
+	private function _filterUrls(array $urls = array()) {
+		foreach ($urls as $url) {
+			$url = trim($url);
+			$firstChar = substr($url, 0, 1);
+			
+			if (preg_match('|^([a-z]+:)?/([/\\\])|', $url)) {
+				// explicitly contains a host
+				if ($firstChar === '/') {
+					// the url doesn't contain the scheme; add the base domain's scheme as a default
+					$url = sprintf('%s:%s', $this->_baseDomain['scheme'], $url);
+				}
+			} else if ($firstChar === '/') {
+				// relative path on the current base domain
+				$url = sprintf('%s://%s%s', $this->_baseDomain['scheme'], $this->_baseDomain['host'], $url);
+			} else {
+				// no leading protocol or forward-slash; could contain a host or a relative path
+				$firstSlashPos = strpos($url, '/');
+				$potentialHost = ($firstSlashPos !== false) ? substr($url, 0, $firstSlashPos) : $url;
+				if (InternetDomainName::isValidDomain($potentialHost)) {
+					// host without the scheme present (or a relative-path matching a host... either way)
+					$url = sprintf('%s://%s', $this->_baseDomain['scheme'], $url);
+				} else {
+					// relative path on the current base domain
+					$url = sprintf('%s://%s/%s', $this->_baseDomain['scheme'], $this->_baseDomain['host'], $url);
+				}
+			}
+			
+			// build our tree
+			$urlParts = String::parse_url($url);
+			$this->_addUrlToTree($urlParts);
+		}
 	}
 	
 	/**
@@ -92,7 +166,7 @@ class SiteCatalog extends \core\Object {
 			throw new \InvalidArgumentException('$url');
 		}
 		
-		$this->_baseDomain = $parts['host'];
+		$this->_baseDomain = $parts;
 		$this->_baseUrl = $url;
 	}
 	
@@ -107,8 +181,7 @@ class SiteCatalog extends \core\Object {
 			$response = $this->_fetch($url);
 			
 			$urls = $this->_findUrlsInResponse($response);
-			$this->tree[$url] = $urls;
-			// @todo filter URLs to only ones we haven't seen before
+			$this->_filterUrls($urls);
 		}
 	}
 }
