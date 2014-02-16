@@ -74,4 +74,18 @@ class InternetDomainName extends PublicSuffixList {
 		return sprintf('%s.%s', end($hostParts), $publicSuffix);
 	}
 	
+	/**
+	 * Checks whether a given host is a valid domain or not.
+	 * 
+	 * @param string $host The host to check.
+	 * @return boolean     true if the host is in fact a hostname; otherwise false.
+	 */
+	public static function isValidDomain($host) {
+		if (static::getPublicSuffix($host) !== null) {
+			// the host has a valid public suffix; let's verify it's overall-valid
+			$host = strtolower($host);
+			return (strlen($host) <= 253) && preg_match('/^([a-z\d](-*[a-z\d])*\.?)*$/', $host);
+		}
+		return false;
+	}
 }
